@@ -22,5 +22,6 @@ yarn-error.log
 
 # IDE and Editor files
 .vscode/
+
 # Se você tiver um arquivo de cache do TypeScript, como
 .tsbuildinfo
