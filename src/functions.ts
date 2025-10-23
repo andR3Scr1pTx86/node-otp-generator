@@ -1,9 +1,17 @@
+import { randomInt } from "crypto";
+
 import { OtpOptions } from "./types";
 
 const MIN_LENGTH = 4;
 const MAX_LENGTH = 10;
 
-export function generate({ length = 6 }: OtpOptions = {}) {
+function onlyNumericOTP(length: number): string {
+    const [min, max] = [Number(10n ** BigInt(length - 1)), Number(10n ** BigInt(length) - 1n)]
+    return randomInt(min, max + 1).toString()
+}
+
+export function generate(options: OtpOptions = {}) {
+    const { length = 6, numeric = true } = options
 
     if (!Number.isInteger(length) || !(!!~Math.sign(length))) {
         throw new Error('OTP length must be a positive integer');
@@ -13,5 +21,6 @@ export function generate({ length = 6 }: OtpOptions = {}) {
         throw new Error(`OTP length must be between ${MIN_LENGTH} and ${MAX_LENGTH}`);
     }
 
-    return '123456'
+    if (numeric) return onlyNumericOTP(length)
 }
+
