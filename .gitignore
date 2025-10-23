@@ -1,0 +1,26 @@
+# Dependencies
+/node_modules
+
+# Build artifacts
+/dist
+/build
+
+# Logs
+npm-debug.log
+*.log
+yarn-error.log
+
+# Environment
+.env
+.env.local
+
+# Coverage reports
+/coverage
+
+# Operating System files
+.DS_Store
+
+# IDE and Editor files
+.vscode/
+# Se você tiver um arquivo de cache do TypeScript, como
+.tsbuildinfo
