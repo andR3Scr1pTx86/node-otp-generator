@@ -1,19 +1,20 @@
-import { randomInt } from "crypto";
+import { randomInt, randomBytes } from "crypto";
 
-import { OtpOptions } from "./types";
+import {
+    MIN_LENGTH,
+    MAX_LENGTH,
+    NUMERIC,
+    LOWER_ALPHABET,
+    UPPER_ALPHABET,
+    SPECIAL_CHARS
+} from './constants'
 
-const MIN_LENGTH = 4;
-const MAX_LENGTH = 10;
+import type { OtpOptions } from "./types";
 
-function onlyNumericOTP(length: number): string {
-    const [min, max] = [Number(10n ** BigInt(length - 1)), Number(10n ** BigInt(length) - 1n)]
-    return randomInt(min, max + 1).toString()
-}
+export function generate(options: OtpOptions = {}): string {
+    const { length = 6, numeric, lowerAlphabet, upperAlphabet, specialChar } = options
 
-export function generate(options: OtpOptions = {}) {
-    const { length = 6, numeric = true } = options
-
-    if (!Number.isInteger(length) || !(!!~Math.sign(length))) {
+    if (!Number.isInteger(length) || length <= 0) {
         throw new Error('OTP length must be a positive integer');
     }
 
@@ -21,6 +22,53 @@ export function generate(options: OtpOptions = {}) {
         throw new Error(`OTP length must be between ${MIN_LENGTH} and ${MAX_LENGTH}`);
     }
 
-    if (numeric) return onlyNumericOTP(length)
+    if (!numeric && !lowerAlphabet && !upperAlphabet && !specialChar) {
+        return generateString(length, NUMERIC + UPPER_ALPHABET)
+    }
+
+    if (numeric && !lowerAlphabet && !upperAlphabet && !specialChar) {
+        return generateNumeric(length)
+    }
+
+    let characterPoll: string = ''
+
+    if (numeric) characterPoll += NUMERIC
+    if (lowerAlphabet) characterPoll += LOWER_ALPHABET
+    if (upperAlphabet) characterPoll += UPPER_ALPHABET
+    if (specialChar) characterPoll += SPECIAL_CHARS
+
+    return generateString(length, characterPoll)
+}
+
+function generateNumeric(length: number): string {
+    const [min, max]: [number, number] = [Number(10n ** BigInt(length - 1)), Number(10n ** BigInt(length) - 1n)]
+    return randomInt(min, max + 1).toString()
+}
+
+function generateString(length: number, pool: string): string {
+    let otp: string = '';
+
+    const bytesLimit: number = 256 - (256 % pool.length);
+    const bufferSize: number = length * 2
+
+    let bufferIndex: number = 0
+    let buffer: Buffer = randomBytes(bufferSize)
+
+    while (otp.length < length) {
+
+        if (bufferIndex >= buffer.length) {
+            bufferIndex = 0
+            buffer = randomBytes(bufferSize)
+        }
+
+        const randomNumber: number = buffer[bufferIndex++];
+
+        if (randomNumber < bytesLimit) {
+            otp += pool[randomNumber % pool.length];
+        }
+
+    }
+
+    return otp;
 }
 
