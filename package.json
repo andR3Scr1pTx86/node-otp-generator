@@ -1,5 +1,5 @@
 {
-  "name": "node-otp-generator",
+  "name": "@andr3scr1ptx86/node-otp-generator",
   "version": "1.0.0",
   "description": "A simple and cryptographically secure OTP code generator for Node.js, ideal for SMS and email verification.",
   "main": "dist/index.js",
