@@ -1,5 +1,4 @@
-export interface OtpOptions {
- length?: number
+export interface IOtpOptions {
  numeric?: boolean
  lowerAlphabet?: boolean
  upperAlphabet?: boolean
