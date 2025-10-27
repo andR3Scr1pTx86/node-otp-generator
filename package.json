@@ -1,7 +1,7 @@
 {
   "name": "nodejs-otp-generator",
-  "version": "1.0.0",
-  "description": "A simple and cryptographically secure OTP code generator for Node.js, ideal for SMS and email verification.",
+  "version": "1.0.1",
+  "description": "A lightweight node.js package for generating cryptographically secure OTP codes — ideal for SMS, email, and other verification flows.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -19,7 +19,7 @@
     "typescript",
     "otp"
   ],
-  "author": "",
+  "author": "andr3scr1ptx86",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^30.0.0",
