@@ -11,7 +11,7 @@ import {
 
 import type { IOtpOptions } from "./types";
 
-export function generate(length: number, options: IOtpOptions = {}): string {
+export function generateOTP(length: number, options: IOtpOptions = {}): string {
 
     if (!Number.isInteger(length) || length <= 0) {
         throw new Error('OTP length must be a positive integer');
