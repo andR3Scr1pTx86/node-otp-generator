@@ -9,10 +9,9 @@ import {
     SPECIAL_CHARS
 } from './constants'
 
-import type { OtpOptions } from "./types";
+import type { IOtpOptions } from "./types";
 
-export function generate(options: OtpOptions = {}): string {
-    const { length = 6, numeric, lowerAlphabet, upperAlphabet, specialChar } = options
+export function generate(length: number, options: IOtpOptions = {}): string {
 
     if (!Number.isInteger(length) || length <= 0) {
         throw new Error('OTP length must be a positive integer');
@@ -22,12 +21,16 @@ export function generate(options: OtpOptions = {}): string {
         throw new Error(`OTP length must be between ${MIN_LENGTH} and ${MAX_LENGTH}`);
     }
 
-    if (!numeric && !lowerAlphabet && !upperAlphabet && !specialChar) {
-        return generateString(length, NUMERIC + UPPER_ALPHABET)
+    const { numeric, lowerAlphabet, upperAlphabet, specialChar } = options
+
+    const noStringOptions = !lowerAlphabet && !upperAlphabet && !specialChar
+
+    if (numeric && noStringOptions) {
+        return generateNumeric(length)
     }
 
-    if (numeric && !lowerAlphabet && !upperAlphabet && !specialChar) {
-        return generateNumeric(length)
+    if (!numeric && noStringOptions) {
+        return generateString(length, NUMERIC + UPPER_ALPHABET)
     }
 
     let characterPoll: string = ''
